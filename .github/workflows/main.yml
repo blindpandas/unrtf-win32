@@ -3,7 +3,6 @@ name: build
 on: [push]
 
 jobs:
-
   mxe32:
     name: Windows 32-bit (MXE Cross Build)
     runs-on: ubuntu-18.04
@@ -52,14 +51,13 @@ jobs:
         && sudo sed -i -e "s/SKIPPLUGINS='System'/SKIPPLUGINS=''/" src/nsis.mk \
         && sudo sed -i -e "s/.*MXE_TARGETS.*/MXE_TARGETS := i686-w64-mingw32.static/" settings.mk \
         && sudo make nsis)
-
     - name: Run MXE Build
       run: |
         i686-w64-mingw32.static-cmake .
         make
 
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: unrtf.zip
-          path: *.exe
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: unrtf.zip
+        path: *.exe
