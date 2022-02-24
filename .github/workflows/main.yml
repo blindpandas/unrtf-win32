@@ -1,36 +1,65 @@
-# This is a basic workflow to help you get started with Actions
+name: build
 
-name: CI
+on: [push]
 
-# Controls when the workflow will run
-on:
-  # Triggers the workflow on push or pull request events but only for the main branch
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
-
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
-
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
-    runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
+  mxe32:
+    name: Windows 32-bit (MXE Cross Build)
+    runs-on: ubuntu-18.04
+    continue-on-error: false
+    env:
+      CFLAGS: -std=c11
+      CXXFLAGS: -std=c++11
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
+    - uses: actions/checkout@v2
 
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
+    - name: Add MXE Repository to Apt
+      uses: myci-actions/add-deb-repo@4
+      with:
+        repo: deb http://pkg.mxe.cc/repos/apt bionic main
+        repo-name: mxe
+        keys: 86B72ED9
+        key-server: keyserver.ubuntu.com
 
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
-        run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+    - name: Install MXE Build Environment
+      run: |
+        sudo apt update
+        sudo apt install \
+          nasm \
+          libtool \
+          libtool-bin \
+          gperf \
+          lzip \
+          p7zip-full \
+          intltool \
+          mxe-i686-w64-mingw32.static-cc \
+          mxe-i686-w64-mingw32.static-cairo \
+          mxe-i686-w64-mingw32.static-pango \
+          mxe-i686-w64-mingw32.static-jpeg \
+          mxe-i686-w64-mingw32.static-glew \
+          mxe-i686-w64-mingw32.static-freetype \
+          mxe-i686-w64-mingw32.static-curl \
+          mxe-i686-w64-mingw32.static-librtmp \
+          mxe-i686-w64-mingw32.static-ffmpeg \
+          mxe-i686-w64-mingw32.static-sdl2-mixer
+        echo /usr/lib/mxe/usr/bin >> $GITHUB_PATH  # exposes it to all future steps
+
+    - name: Configure MXE for NSIS Installer Builds
+      run: |
+        (cd /usr/lib/mxe/ \
+        && sudo make settings.mk \
+        && sudo sed -i -e "s/SKIPPLUGINS='System'/SKIPPLUGINS=''/" src/nsis.mk \
+        && sudo sed -i -e "s/.*MXE_TARGETS.*/MXE_TARGETS := i686-w64-mingw32.static/" settings.mk \
+        && sudo make nsis)
+
+    - name: Run MXE Build
+      run: |
+        i686-w64-mingw32.static-cmake .
+        make
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: unrtf.zip
+          path: *.exe
