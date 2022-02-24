@@ -46,6 +46,7 @@ jobs:
 
     - name: Run MXE Build
       run: |
+        ./bootstrap
         ./configure --host=i686-w64-mingw32.static
         make
 
