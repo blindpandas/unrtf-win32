@@ -51,11 +51,12 @@ jobs:
         sudo autoreconf -i
         sudo ./configure --host=i686-w64-mingw32.static
         sudo make
-        sudo ls -R
-        sudo cp src/unrtf unrtf.exe
+        #sudo ls -R
+        #sudo cp src/unrtf unrtf.exe
+        sudo chmod ugo+rwx src
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v2
       with:
         name: "unrtf.exe"
-        path: unrtf.exe
+        path: src/unrtf
