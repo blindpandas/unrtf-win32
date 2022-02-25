@@ -49,7 +49,7 @@ jobs:
         sudo tar -xz -f "unrtf-0.21.9.tar.gz"
         cd "unrtf-0.21.9"
         sudo autoreconf -i
-        ./configure --host=i686-w64-mingw32.static
+        sudo ./configure --host=i686-w64-mingw32.static
         make
 
     - name: Upload artifacts
