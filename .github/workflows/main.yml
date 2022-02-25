@@ -72,6 +72,6 @@ jobs:
     - name: Upload artifacts
       uses: actions/upload-artifact@v2
       with:
-        name: "unrtf"
+        name: "release"
         #path: "unrtf-0.21.9/src/unrtf"
-        path: ./release
+        path: "unrtf-0.21.9/release"
