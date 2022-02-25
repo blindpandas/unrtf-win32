@@ -44,16 +44,28 @@ jobs:
           mxe-i686-w64-mingw32.static-sdl2-mixer
         echo /usr/lib/mxe/usr/bin >> $GITHUB_PATH  # exposes it to all future steps
 
+    - name: Configure MXE for NSIS Installer Builds
+      run: |
+        (cd /usr/lib/mxe/ \
+        && sudo make settings.mk \
+        && sudo sed -i -e "s/SKIPPLUGINS='System'/SKIPPLUGINS=''/" src/nsis.mk \
+        && sudo sed -i -e "s/.*MXE_TARGETS.*/MXE_TARGETS := i686-w64-mingw32.static/" settings.mk \
+        && sudo make nsis)
+
     - name: Run MXE Build
       run: |
+        unset `env | \
+            grep -vi '^EDITOR=\|^HOME=\|^LANG=\|MXE\|^PATH=' | \
+            grep -vi 'PKG_CONFIG\|PROXY\|^PS1=\|^TERM=' | \
+            cut -d '=' -f1 | tr '\n' ' '`
         sudo tar -xz -f "unrtf-0.21.9.tar.gz"
         cd "unrtf-0.21.9"
-        mkdir release
+        sudo mkdir release
         sudo autoreconf -i
         sudo ./configure --host=i686-w64-mingw32.static `--prefix=./release
         sudo make
-        ls -R ./release
-        ls -R .
+        sudo ls -R ./release
+        sudo ls -R .
         cd ..
         sudo chmod -R a+rwX ./unrtf-0.21.9
 
