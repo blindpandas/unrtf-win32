@@ -48,9 +48,11 @@ jobs:
       run: |
         sudo tar -xz -f "unrtf-0.21.9.tar.gz"
         cd "unrtf-0.21.9"
+        mkdir release
         sudo autoreconf -i
-        sudo ./configure --host=i686-w64-mingw32.static --pkg-config=i686-w64-mingw32.static-pkg-config --enable-static --with-lzo2=/usr/local/mxe/usr/i686-w64-mingw32.static/lib/liblzo2.a
+        sudo ./configure --host=i686-w64-mingw32.static `--prefix=./release
         sudo make
+        ls -R ./release
         ls -R .
         cd ..
         sudo chmod -R a+rwX ./unrtf-0.21.9
@@ -59,4 +61,5 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: "unrtf"
-        path: "unrtf-0.21.9/src/unrtf"
+        #path: "unrtf-0.21.9/src/unrtf"
+        path: ./release
