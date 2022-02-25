@@ -62,7 +62,7 @@ jobs:
         cd "unrtf-0.21.9"
         sudo mkdir release
         sudo autoreconf -i
-        sudo ./configure --host=i686-w64-mingw32.static --prefix=./release
+        sudo ./configure --host=i686-w64-mingw32.static --prefix=`realpath ./release`
         sudo make
         sudo ls -R ./release
         sudo ls -R .
