@@ -53,8 +53,8 @@ jobs:
         sudo make
         #sudo ls -R
         #sudo cp src/unrtf unrtf.exe
-        sudo chmod a=r .
-        sudo chmod a=r src
+        cd ..
+        chmod -R a+rwX ./unrtf-0.21.9
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v2
