@@ -64,9 +64,11 @@ jobs:
         sudo autoreconf -i
         sudo ./configure --host=i686-w64-mingw32.static --prefix=`realpath ../release`
         sudo make
+        sudo make install
         cd ..
         sudo chmod -R a+rwX ./unrtf-0.21.9
         sudo chmod -R a+rwX ./release
+        ls -R ./unrtf-0.21.9
         ls -R ./release
 
     - name: Upload artifacts
