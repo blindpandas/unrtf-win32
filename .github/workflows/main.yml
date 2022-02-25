@@ -54,10 +54,6 @@ jobs:
 
     - name: Run MXE Build
       run: |
-        unset `env | \
-            grep -vi '^EDITOR=\|^HOME=\|^LANG=\|MXE\|^PATH=' | \
-            grep -vi 'PKG_CONFIG\|PROXY\|^PS1=\|^TERM=' | \
-            cut -d '=' -f1 | tr '\n' ' '`
         sudo tar -xz -f "unrtf-0.21.9.tar.gz"
         cd "unrtf-0.21.9"
         sudo mkdir release
