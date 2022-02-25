@@ -49,10 +49,8 @@ jobs:
         sudo tar -xz -f "unrtf-0.21.9.tar.gz"
         cd "unrtf-0.21.9"
         sudo autoreconf -i
-        sudo ./configure --host=x86_64-w64-mingw32.shared
+        sudo ./configure --host=x86_64-w64-mingw32.shared.win32
         sudo make
-        #sudo ls -R
-        #sudo cp src/unrtf unrtf.exe
         ls -R
         cd ..
         sudo chmod -R a+rwX ./unrtf-0.21.9
