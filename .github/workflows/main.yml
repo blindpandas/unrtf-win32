@@ -50,7 +50,7 @@ jobs:
         cd "unrtf-0.21.9"
         sudo autoreconf -i
         sudo ./configure --host=i686-w64-mingw32.static
-        make
+        sudo make
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v2
