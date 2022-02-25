@@ -46,7 +46,8 @@ jobs:
 
     - name: Run MXE Build
       run: |
-        ./bootstrap
+        tar -xz -f "unrtf-0.21.9.tar.gz"
+        cd "unrtf-0.21.9"
         ./configure --host=i686-w64-mingw32.static
         make
 
