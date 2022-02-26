@@ -59,21 +59,22 @@ jobs:
             grep -vi 'PKG_CONFIG\|PROXY\|^PS1=\|^TERM=' | \
             cut -d '=' -f1 | tr '\n' ' '`
         mkdir release
-        sudo tar -xz -f "unrtf-0.21.9.tar.gz"
-        cd "unrtf-0.21.9"
-        sudo autoreconf -i
+        sudo tar -xz -f "unrtf-0.21.10.tar.gz"
+        cd "unrtf-0.21.10"
+        #sudo autoreconf -i
+        sudo ./bootstrap
         sudo ./configure --host=i686-w64-mingw32.static --prefix=`realpath ../release`
         sudo make
         sudo make install
         cd ..
-        sudo chmod -R a+rwX ./unrtf-0.21.9
+        sudo chmod -R a+rwX ./unrtf-0.21.10
         sudo chmod -R a+rwX ./release
-        ls -R ./unrtf-0.21.9
+        ls -R ./unrtf-0.21.10
         ls -R ./release
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v2
       with:
         name: "release"
-        #path: "unrtf-0.21.9/src/unrtf"
+        #path: "unrtf-0.21.10/src/unrtf"
         path: release/
