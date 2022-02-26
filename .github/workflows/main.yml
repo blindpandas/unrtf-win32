@@ -58,6 +58,7 @@ jobs:
             grep -vi '^EDITOR=\|^HOME=\|^LANG=\|MXE\|^PATH=' | \
             grep -vi 'PKG_CONFIG\|PROXY\|^PS1=\|^TERM=' | \
             cut -d '=' -f1 | tr '\n' ' '`
+        export PATH=/usr/lib/mxe/usr/bin:$PATH
         mkdir release
         sudo tar -xz -f "unrtf-0.21.10.tar.gz"
         cd "unrtf-0.21.10"
